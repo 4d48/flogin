@@ -172,6 +172,7 @@ class ResultConstructorKwargs(TypedDict, total=False):
     rounded_icon: NotRequired[bool]
     glyph: NotRequired[Glyph]
     auto_complete_text: NotRequired[str]
+    query_suggestion_text: NotRequired[str]
     preview: NotRequired[ResultPreview]
     progress_bar: NotRequired[ProgressBar]
 
@@ -240,6 +241,7 @@ class Result(Base["RawResult"], Generic[PluginT]):
         copy_text: str | None = None,
         score: int | None = None,
         auto_complete_text: str | None = None,
+        query_suggestion_text: str | None = None,
         preview: ResultPreview | None = None,
         progress_bar: ProgressBar | None = None,
         rounded_icon: bool | None = None,
@@ -254,6 +256,7 @@ class Result(Base["RawResult"], Generic[PluginT]):
         self.copy_text = copy_text
         self.score = score
         self.auto_complete_text = auto_complete_text
+        self.query_suggestion_text = query_suggestion_text
         self.preview = preview
         self.progress_bar = progress_bar
         self.rounded_icon = rounded_icon
@@ -388,6 +391,8 @@ class Result(Base["RawResult"], Generic[PluginT]):
             x["preview"] = self.preview.to_dict()
         if self.auto_complete_text is not None:
             x["autoCompleteText"] = self.auto_complete_text
+        if self.query_suggestion_text is not None:
+            x["querySuggestionText"] = self.query_suggestion_text
         if self.progress_bar is not None:
             x.update(self.progress_bar.to_dict())  # type: ignore
         if self.rounded_icon is not None:
@@ -426,6 +431,7 @@ class Result(Base["RawResult"], Generic[PluginT]):
             title_tooltip=data.get("titleTooltip"),
             sub_tooltip=data.get("subtitleTooltip"),
             copy_text=data.get("copyText"),
+            query_suggestion_text=data.get("querySuggestionText")
         )
 
     @classmethod
@@ -480,4 +486,4 @@ class Result(Base["RawResult"], Generic[PluginT]):
         return secrets.token_hex(15)
 
     def __repr__(self) -> str:
-        return f"<{self.__class__.__name__} {self.title=} {self.sub=} {self.icon=} {self.title_highlight_data=} {self.title_tooltip=} {self.sub_tooltip=} {self.copy_text=} {self.score=} {self.auto_complete_text=} {self.preview=} {self.progress_bar=} {self.rounded_icon=} {self.glyph=}>"
+        return f"<{self.__class__.__name__} {self.title=} {self.sub=} {self.icon=} {self.title_highlight_data=} {self.title_tooltip=} {self.sub_tooltip=} {self.copy_text=} {self.score=} {self.auto_complete_text=} {self.query_suggestion_text=} {self.preview=} {self.progress_bar=} {self.rounded_icon=} {self.glyph=}>"
