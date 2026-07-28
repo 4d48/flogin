@@ -23,6 +23,7 @@ class RawQuery(TypedDict):
     rawQuery: str
     isReQuery: bool
     actionKeyword: str
+    originalQuery: str
 
 
 class Query(Generic[ConditionDataT]):
@@ -40,8 +41,10 @@ class Query(Generic[ConditionDataT]):
 
     Attributes
     ----------
-    raw_text: :class:`str`:
+    original_query: :class:`str`:
         The raw and complete query, which includes the keyword
+    raw_text: :class:`str`:
+        Same as the `original_query`, but with spaces stripped
     is_requery: :class:`bool`
         Whether the query is a requery or not
     text: :class:`str`
@@ -79,6 +82,10 @@ class Query(Generic[ConditionDataT]):
     @property
     def text(self) -> str:
         return self._data["search"]
+
+    @property
+    def original_query(self) -> str:
+        return self._data["originalQuery"]
 
     def __eq__(self, other: Any) -> bool:
         return (
